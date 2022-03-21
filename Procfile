@@ -1,1 +1,1 @@
-worker: java -jar VSRBot.jar
+worker: java -jar VSRBot-1.0-SNAPSHOT-jar-with-dependencies.jar
