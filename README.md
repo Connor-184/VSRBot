@@ -18,6 +18,6 @@ How to Play:
 5. To end the game type "!stop" in the same channel or press the "End Game" button
 -----------------------------------------------------
 
-I plan on adding more strategies in the future and possibly a variation called Crosshair roulette
+I plan on adding more strategies in the future and possibly a variation called Crosshair roulette and
 I would love to hear any feedback, suggestions, and new strategies to add so just send me a message
 on Discord Frogic#4870
