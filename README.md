@@ -1,5 +1,7 @@
 # VSRBot
-Discord Bot for playing Valorant Strategy Roulette   
+Discord Bot for playing Valorant Strategy Roulette
+
+Over 100+ unique and fun strategies to try with your friends!
 
 What is Strategy Roulette:
 ------------------------------------------------------
@@ -14,3 +16,4 @@ How to Play:
 3. Choose a map and a side
 4. Press the "Generate Strat" button and have fun!
 5. To end the game type "!stop" in the same channel or press the "End Game" button
+-----------------------------------------------------
