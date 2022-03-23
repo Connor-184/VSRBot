@@ -34,14 +34,17 @@ public class Commands extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
+
+        // Gets message sent in discord channel
         String[] args = event.getMessage().getContentRaw().split(" ");
         MessageChannel channel = event.getChannel();
 
         if (args[0].equalsIgnoreCase(prefix + "start")) {
 
+
+            // Buttons for action lists
             List<Button> mapButtons = new ArrayList<>();
             List<Button> mapButtons2 = new ArrayList<>();
-
             mapButtons.add(Button.primary("Ascent", "Ascent"));
             mapButtons.add(Button.primary("Bind", "Bind"));
             mapButtons.add(Button.primary("Breeze", "Breeze"));
@@ -51,8 +54,10 @@ public class Commands extends ListenerAdapter {
             mapButtons2.add(Button.primary("Split", "Split"));
             mapButtons2.add(Button.primary("General", "Any Map"));
 
+
+            // Sets up embed for choosing a map
             channel.sendMessageEmbeds(initial.build()).setActionRows(ActionRow.of(mapButtons), ActionRow.of(mapButtons2)).queue(message -> {
-                initial.setDescription("Choose a Side: ");
+                initial.setDescription("Choose a Map: ");
                 messageID = message.getIdLong();
             });
 
@@ -71,10 +76,10 @@ public class Commands extends ListenerAdapter {
 
         MessageChannel channel = event.getChannel();
 
+        // Buttons for action lists
         List<Button> sideButtons = new ArrayList<>();
         sideButtons.add(Button.primary("Attacker", "Attacker"));
         sideButtons.add(Button.primary("Defender", "Defender"));
-
         List<Button> strats = new ArrayList<>();
         List<Button> genStrats = new ArrayList<>();
         strats.add(Button.primary("Strat", "Generate Strat"));
@@ -84,8 +89,9 @@ public class Commands extends ListenerAdapter {
         genStrats.add(Button.danger("End", "End Game"));
 
         String[] maps = new String[] {"Ascent", "Bind", "Breeze", "Fracture", "Haven", "Icebox", "Split", "General"};
-
         event.deferEdit().queue();
+
+        // switch statement to handle each button event
         switch (event.getButton().getId()) {
             case "Ascent":
                 channel.editMessageEmbedsById(messageID).queue(ascent -> {
@@ -159,12 +165,19 @@ public class Commands extends ListenerAdapter {
                 attacker = false;
                 break;
             case "Strat":
+
+                // Gets strats from strats.json and creates new json object
                 JSONObject jsonObject = new JSONObject(contents);
                 JSONArray genstrat;
                 JSONArray mapstrat;
+
+                // general strat or map specific strat
                 int rand1 = ThreadLocalRandom.current().nextInt(0, 5);
 
+
                 if (!(mapNum == 7)) {
+
+                    // map specific strat
                     if (rand1 == 1) {
                         if (attacker) {
                             mapstrat = jsonObject.getJSONArray(maps[mapNum] + "A");
@@ -176,6 +189,7 @@ public class Commands extends ListenerAdapter {
                             initial.setDescription("Map: " + maps[mapNum] + "\n " + "Side: Defender" + "\n" + "Strat: " + mapstrat.getString(rand2));
                             strat.editMessageEmbeds(initial.build()).setActionRow(strats).queue();
                         });
+                        // general strat
                     } else {
                         if (attacker) {
                             genstrat = jsonObject.getJSONArray("General");
