@@ -42,6 +42,7 @@ public class Commands extends ListenerAdapter {
         if (args[0].equalsIgnoreCase(prefix + "start")) {
 
 
+
             // Buttons for action lists
             List<Button> mapButtons = new ArrayList<>();
             List<Button> mapButtons2 = new ArrayList<>();
@@ -54,10 +55,11 @@ public class Commands extends ListenerAdapter {
             mapButtons2.add(Button.primary("Split", "Split"));
             mapButtons2.add(Button.primary("General", "Any Map"));
 
-            initial.setDescription("Choose a Map: ");
+            channel.sendMessageEmbeds(initial.build()).setActionRows(ActionRow.of(mapButtons), ActionRow.of(mapButtons2)).queue(message -> initial.setDescription("Choose a Map: "));
 
             // Sets up embed for choosing a map
             channel.sendMessageEmbeds(initial.build()).setActionRows(ActionRow.of(mapButtons), ActionRow.of(mapButtons2)).queue(message -> {
+                initial.setDescription("Choose a Map: ");
                 messageID = message.getIdLong();
             });
 
