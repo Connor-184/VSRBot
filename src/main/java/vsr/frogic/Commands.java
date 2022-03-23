@@ -54,10 +54,10 @@ public class Commands extends ListenerAdapter {
             mapButtons2.add(Button.primary("Split", "Split"));
             mapButtons2.add(Button.primary("General", "Any Map"));
 
+            initial.setDescription("Choose a Map: ");
 
             // Sets up embed for choosing a map
             channel.sendMessageEmbeds(initial.build()).setActionRows(ActionRow.of(mapButtons), ActionRow.of(mapButtons2)).queue(message -> {
-                initial.setDescription("Choose a Map: ");
                 messageID = message.getIdLong();
             });
 
