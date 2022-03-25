@@ -30,7 +30,7 @@ public class Commands extends ListenerAdapter {
 
     public Commands() throws IOException {
     }
-
+    
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
@@ -55,8 +55,6 @@ public class Commands extends ListenerAdapter {
             mapButtons2.add(Button.primary("Split", "Split"));
             mapButtons2.add(Button.primary("General", "Any Map"));
 
-            channel.sendMessageEmbeds(initial.build()).setActionRows(ActionRow.of(mapButtons), ActionRow.of(mapButtons2)).queue(message -> initial.setDescription("Choose a Map: "));
-
             // Sets up embed for choosing a map
             channel.sendMessageEmbeds(initial.build()).setActionRows(ActionRow.of(mapButtons), ActionRow.of(mapButtons2)).queue(message -> {
                 initial.setDescription("Choose a Map: ");
@@ -69,6 +67,7 @@ public class Commands extends ListenerAdapter {
             channel.editMessageEmbedsById(messageID).queue(end -> {
                 initial.setDescription("The Game is Over. Thanks for Playing!");
                 end.editMessageEmbeds(initial.build()).setActionRows().queue();
+                initial.setDescription("Choose a Map: ");
             });
         }
     }
@@ -241,6 +240,7 @@ public class Commands extends ListenerAdapter {
                 channel.editMessageEmbedsById(messageID).queue(end -> {
                     initial.setDescription("The Game is Over. Thanks for Playing!");
                     end.editMessageEmbeds(initial.build()).setActionRows().queue();
+                    initial.setDescription("Choose a Map: ");
                 });
                 break;
         }
