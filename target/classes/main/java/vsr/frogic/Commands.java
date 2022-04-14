@@ -224,8 +224,8 @@ public class Commands extends ListenerAdapter {
         JSONArray genstrat;
         JSONArray mapstrat;
         String strat = "";
-        // 1/4 chance to get map-specific strat
-        int rand1 = ThreadLocalRandom.current().nextInt(0, 5);
+        // 1/5 chance to get map-specific strat
+        int rand1 = ThreadLocalRandom.current().nextInt(0, 6);
 
         // map specific strat
         if (mapNum != 7 || rand1 != 1) {
