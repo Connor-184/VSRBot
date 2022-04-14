@@ -168,10 +168,17 @@ public class Commands extends ListenerAdapter {
                 attacker = false;
                 break;
             case "Strat":
-                channel.editMessageEmbedsById(messageID).queue(strat -> {
-                    initial.setDescription("Map: " + maps[mapNum] + "\n " + "Side: Defender" + "\n" + "Strat: " + getStrat(attacker, mapNum));
-                    strat.editMessageEmbeds(initial.build()).setActionRow(strats).queue();
-                });
+                if (attacker) {
+                    channel.editMessageEmbedsById(messageID).queue(strat -> {
+                        initial.setDescription("Map: " + maps[mapNum] + "\n " + "Side: Attacker" + "\n" + "Strat: " + getStrat(attacker, mapNum));
+                        strat.editMessageEmbeds(initial.build()).setActionRow(strats).queue();
+                    });
+                } else {
+                    channel.editMessageEmbedsById(messageID).queue(strat -> {
+                        initial.setDescription("Map: " + maps[mapNum] + "\n " + "Side: Defender" + "\n" + "Strat: " + getStrat(attacker, mapNum));
+                        strat.editMessageEmbeds(initial.build()).setActionRow(strats).queue();
+                    });
+                }
                 break;
 
                 // switches sides between attacker and defender

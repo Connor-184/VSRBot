@@ -9,20 +9,25 @@ import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+
+/**
+ * Handles commands and interactions for VSRBot
+ *
+ * @author Connor McNally
+ */
 
 public class Commands extends ListenerAdapter {
     public String prefix = "!";
     public String strats = "src/main/resources/strats.json";
     public String contents = new String(Files.readAllBytes(Paths.get(strats)));
+    public String[] maps = new String[] {"Ascent", "Bind", "Breeze", "Fracture", "Haven", "Icebox", "Split", "General"};
     public EmbedBuilder initial = new EmbedBuilder().setTitle("Strategy Roulette").setColor(Color.RED).setDescription("Select a Map: ");
     Long messageID;
     int mapNum = 0;
@@ -31,17 +36,18 @@ public class Commands extends ListenerAdapter {
     public Commands() throws IOException {
     }
 
-
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
+
+        // Gets message sent in discord channel
         String[] args = event.getMessage().getContentRaw().split(" ");
         MessageChannel channel = event.getChannel();
 
         if (args[0].equalsIgnoreCase(prefix + "start")) {
 
+            // Buttons for action lists
             List<Button> mapButtons = new ArrayList<>();
             List<Button> mapButtons2 = new ArrayList<>();
-
             mapButtons.add(Button.primary("Ascent", "Ascent"));
             mapButtons.add(Button.primary("Bind", "Bind"));
             mapButtons.add(Button.primary("Breeze", "Breeze"));
@@ -51,17 +57,20 @@ public class Commands extends ListenerAdapter {
             mapButtons2.add(Button.primary("Split", "Split"));
             mapButtons2.add(Button.primary("General", "Any Map"));
 
+            // Sets up embed for choosing a map
             channel.sendMessageEmbeds(initial.build()).setActionRows(ActionRow.of(mapButtons), ActionRow.of(mapButtons2)).queue(message -> {
-                initial.setDescription("Choose a Side: ");
+                initial.setDescription("Choose a Map: ");
                 messageID = message.getIdLong();
             });
 
         }
 
+        // Command for ending an existing game
         if (args[0].equalsIgnoreCase(prefix + "stop")) {
             channel.editMessageEmbedsById(messageID).queue(end -> {
                 initial.setDescription("The Game is Over. Thanks for Playing!");
                 end.editMessageEmbeds(initial.build()).setActionRows().queue();
+                initial.setDescription("Choose a Map: ");
             });
         }
     }
@@ -71,10 +80,10 @@ public class Commands extends ListenerAdapter {
 
         MessageChannel channel = event.getChannel();
 
+        // Buttons for action lists
         List<Button> sideButtons = new ArrayList<>();
         sideButtons.add(Button.primary("Attacker", "Attacker"));
         sideButtons.add(Button.primary("Defender", "Defender"));
-
         List<Button> strats = new ArrayList<>();
         List<Button> genStrats = new ArrayList<>();
         strats.add(Button.primary("Strat", "Generate Strat"));
@@ -83,9 +92,9 @@ public class Commands extends ListenerAdapter {
         strats.add(Button.danger("End", "End Game"));
         genStrats.add(Button.danger("End", "End Game"));
 
-        String[] maps = new String[] {"Ascent", "Bind", "Breeze", "Fracture", "Haven", "Icebox", "Split", "General"};
-
         event.deferEdit().queue();
+
+        // switch statement to handle each button event
         switch (event.getButton().getId()) {
             case "Ascent":
                 channel.editMessageEmbedsById(messageID).queue(ascent -> {
@@ -159,52 +168,21 @@ public class Commands extends ListenerAdapter {
                 attacker = false;
                 break;
             case "Strat":
-                JSONObject jsonObject = new JSONObject(contents);
-                JSONArray genstrat;
-                JSONArray mapstrat;
-                int rand1 = ThreadLocalRandom.current().nextInt(0, 5);
-
-                if (!(mapNum == 7)) {
-                    if (rand1 == 1) {
-                        if (attacker) {
-                            mapstrat = jsonObject.getJSONArray(maps[mapNum] + "A");
-                        } else {
-                            mapstrat = jsonObject.getJSONArray(maps[mapNum] + "D");
-                        }
-                        int rand2 = ThreadLocalRandom.current().nextInt(0, mapstrat.length());
-                        channel.editMessageEmbedsById(messageID).queue(strat -> {
-                            initial.setDescription("Map: " + maps[mapNum] + "\n " + "Side: Defender" + "\n" + "Strat: " + mapstrat.getString(rand2));
-                            strat.editMessageEmbeds(initial.build()).setActionRow(strats).queue();
-                        });
-                    } else {
-                        if (attacker) {
-                            genstrat = jsonObject.getJSONArray("General");
-                            int rand2 = ThreadLocalRandom.current().nextInt(0, genstrat.length());
-                            channel.editMessageEmbedsById(messageID).queue(strat -> {
-                                initial.setDescription("Map: " + maps[mapNum] + "\n " + "Side: Attacker" + "\n " + "Strat: " + genstrat.getString(rand2));
-                                strat.editMessageEmbeds(initial.build()).setActionRow(strats).queue();
-                            });
-                        } else {
-                            genstrat = jsonObject.getJSONArray("General");
-                            int rand2 = ThreadLocalRandom.current().nextInt(0, genstrat.length());
-                            channel.editMessageEmbedsById(messageID).queue(strat -> {
-                                initial.setDescription("Map: " + maps[mapNum] + "\n " + "Side: Defender" + "\n " + "Strat: " + genstrat.getString(rand2));
-                                strat.editMessageEmbeds(initial.build()).setActionRow(strats).queue();
-                            });
-                        }
-                    }
-                } else {
-                    genstrat = jsonObject.getJSONArray("General");
-                    int rand2 = ThreadLocalRandom.current().nextInt(0, genstrat.length());
+                if (attacker) {
                     channel.editMessageEmbedsById(messageID).queue(strat -> {
-                        initial.setDescription("Any Map" + "\n " + "Strat: " + genstrat.getString(rand2));
-                        strat.editMessageEmbeds(initial.build()).setActionRow(genStrats).queue();
+                        initial.setDescription("Map: " + maps[mapNum] + "\n " + "Side: Attacker" + "\n" + "Strat: " + getStrat(attacker, mapNum));
+                        strat.editMessageEmbeds(initial.build()).setActionRow(strats).queue();
+                    });
+                } else {
+                    channel.editMessageEmbedsById(messageID).queue(strat -> {
+                        initial.setDescription("Map: " + maps[mapNum] + "\n " + "Side: Defender" + "\n" + "Strat: " + getStrat(attacker, mapNum));
+                        strat.editMessageEmbeds(initial.build()).setActionRow(strats).queue();
                     });
                 }
-
                 break;
-            case "Change":
 
+                // switches sides between attacker and defender
+            case "Change":
                 if (attacker) {
                     attacker = false;
                     channel.editMessageEmbedsById(messageID).queue(change -> {
@@ -225,9 +203,46 @@ public class Commands extends ListenerAdapter {
                 channel.editMessageEmbedsById(messageID).queue(end -> {
                     initial.setDescription("The Game is Over. Thanks for Playing!");
                     end.editMessageEmbeds(initial.build()).setActionRows().queue();
+                    initial.setDescription("Choose a Map: ");
                 });
                 break;
         }
+    }
+
+    /**
+     * Returns a string containing a strategy based on options selected
+     *
+     * @param attacker true if attacker false if defender
+     * @param mapNum corresponds to the map chosen
+     * @return
+     */
+
+    private String getStrat(boolean attacker, int mapNum) {
+
+        // Gets strats from strats.json and creates new json object
+        JSONObject jsonObject = new JSONObject(contents);
+        JSONArray genstrat;
+        JSONArray mapstrat;
+        String strat;
+        // 1/4 chance to get map-specific strat
+        int rand1 = ThreadLocalRandom.current().nextInt(0, 5);
+
+        // map specific strat
+        if (mapNum != 7 || rand1 != 1) {
+            genstrat = jsonObject.getJSONArray("General");
+            int rand2 = ThreadLocalRandom.current().nextInt(0, genstrat.length());
+            strat = genstrat.getString(rand2);
+        } else {
+            if (attacker) {
+                mapstrat = jsonObject.getJSONArray(maps[mapNum] + "A");
+            } else {
+                mapstrat = jsonObject.getJSONArray(maps[mapNum] + "D");
+            }
+            int rand2 = ThreadLocalRandom.current().nextInt(0, mapstrat.length());
+            strat = mapstrat.getString(rand2);
+        }
+
+        return strat;
     }
 
 }
