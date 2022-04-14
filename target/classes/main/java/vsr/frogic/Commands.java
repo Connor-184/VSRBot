@@ -223,7 +223,7 @@ public class Commands extends ListenerAdapter {
         JSONObject jsonObject = new JSONObject(contents);
         JSONArray genstrat;
         JSONArray mapstrat;
-        String strat;
+        String strat = "";
         // 1/4 chance to get map-specific strat
         int rand1 = ThreadLocalRandom.current().nextInt(0, 5);
 
@@ -232,7 +232,8 @@ public class Commands extends ListenerAdapter {
             genstrat = jsonObject.getJSONArray("General");
             int rand2 = ThreadLocalRandom.current().nextInt(0, genstrat.length());
             strat = genstrat.getString(rand2);
-        } else {
+        }
+        if (mapNum != 7 && rand1 == 1) {
             if (attacker) {
                 mapstrat = jsonObject.getJSONArray(maps[mapNum] + "A");
             } else {
