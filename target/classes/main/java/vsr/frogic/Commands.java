@@ -2,6 +2,7 @@ package vsr.frogic;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -24,14 +25,11 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 
 public class Commands extends ListenerAdapter {
-    public String prefix = "!";
-    public String strats = "src/main/resources/strats.json";
-    public String contents = new String(Files.readAllBytes(Paths.get(strats)));
-    public String[] maps = new String[] {"Ascent", "Bind", "Breeze", "Fracture", "Haven", "Icebox", "Split", "General"};
-    public EmbedBuilder initial = new EmbedBuilder().setTitle("Strategy Roulette").setColor(Color.RED).setDescription("Select a Map: ");
-    Long messageID;
-    int mapNum = 0;
-    public boolean attacker;
+    public final String prefix = "!";
+    public final String strats = "src/main/resources/strats.json";
+    public final String contents = new String(Files.readAllBytes(Paths.get(strats)));
+    public final String[] maps = new String[]{"Ascent", "Bind", "Breeze", "Fracture", "Haven", "Icebox", "Split", "General"};
+    public final EmbedBuilder initial = new EmbedBuilder().setTitle("Strategy Roulette").setDescription("Choose a Map: ").setColor(Color.RED);
 
     public Commands() throws IOException {
     }
@@ -58,32 +56,19 @@ public class Commands extends ListenerAdapter {
             mapButtons2.add(Button.primary("General", "Any Map"));
 
             // Sets up embed for choosing a map
-            channel.sendMessageEmbeds(initial.build()).setActionRows(ActionRow.of(mapButtons), ActionRow.of(mapButtons2)).queue(message -> {
-                initial.setDescription("Choose a Map: ");
-                messageID = message.getIdLong();
-            });
+            channel.sendMessageEmbeds(initial.build()).setActionRows(ActionRow.of(mapButtons), ActionRow.of(mapButtons2)).queue(message -> initial.setDescription("Choose a Map: "));
 
-        }
-
-        // Command for ending an existing game
-        if (args[0].equalsIgnoreCase(prefix + "stop")) {
-            channel.editMessageEmbedsById(messageID).queue(end -> {
-                initial.setDescription("The Game is Over. Thanks for Playing!");
-                end.editMessageEmbeds(initial.build()).setActionRows().queue();
-                initial.setDescription("Choose a Map: ");
-            });
         }
     }
 
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
 
-        MessageChannel channel = event.getChannel();
-
         // Buttons for action lists
         List<Button> sideButtons = new ArrayList<>();
         sideButtons.add(Button.primary("Attacker", "Attacker"));
         sideButtons.add(Button.primary("Defender", "Defender"));
+        sideButtons.add(Button.danger("End", "End Game"));
         List<Button> strats = new ArrayList<>();
         List<Button> genStrats = new ArrayList<>();
         strats.add(Button.primary("Strat", "Generate Strat"));
@@ -94,116 +79,119 @@ public class Commands extends ListenerAdapter {
 
         event.deferEdit().queue();
 
+        MessageEmbed a;
+        String desc;
+
+
         // switch statement to handle each button event
         switch (event.getButton().getId()) {
             case "Ascent":
-                channel.editMessageEmbedsById(messageID).queue(ascent -> {
-                    initial.setDescription("Map: Ascent \n Choose a side: ");
-                    ascent.editMessageEmbeds(initial.build()).setActionRow(sideButtons).queue();
+                event.getChannel().editMessageEmbedsById(event.getMessageId()).queue(ascent -> {
+                    EmbedBuilder embed = new EmbedBuilder().setTitle("Strategy Roulette").setDescription("Map: Ascent \n Choose a side: ").setColor(Color.RED);
+                    ascent.editMessageEmbeds(embed.build()).setActionRow(sideButtons).queue();
                 });
-                mapNum = 0;
                 break;
             case "Bind":
-                channel.editMessageEmbedsById(messageID).queue(bind -> {
-                    initial.setDescription("Map: Bind \n Choose a Side: ");
-                    bind.editMessageEmbeds(initial.build()).setActionRow(sideButtons).queue();
+                event.getChannel().editMessageEmbedsById(event.getMessageId()).queue(bind -> {
+                    EmbedBuilder embed = new EmbedBuilder().setTitle("Strategy Roulette").setDescription("Map: Bind \n Choose a side: ").setColor(Color.RED);
+                    bind.editMessageEmbeds(embed.build()).setActionRow(sideButtons).queue();
                 });
-                mapNum = 1;
                 break;
             case "Breeze":
-                channel.editMessageEmbedsById(messageID).queue(breeze -> {
-                    initial.setDescription("Map: Breeze \n Choose a Side: ");
-                    breeze.editMessageEmbeds(initial.build()).setActionRow(sideButtons).queue();
+                event.getChannel().editMessageEmbedsById(event.getMessageId()).queue(breeze -> {
+                    EmbedBuilder embed = new EmbedBuilder().setTitle("Strategy Roulette").setDescription("Map: Breeze \n Choose a side: ").setColor(Color.RED);
+                    breeze.editMessageEmbeds(embed.build()).setActionRow(sideButtons).queue();
                 });
-                mapNum = 2;
                 break;
             case "Fracture":
-                channel.editMessageEmbedsById(messageID).queue(fracture -> {
-                    initial.setDescription("Map: Fracture \n Choose a Side: ");
-                    fracture.editMessageEmbeds(initial.build()).setActionRow(sideButtons).queue();
+                event.getChannel().editMessageEmbedsById(event.getMessageId()).queue(fracture -> {
+                    EmbedBuilder embed = new EmbedBuilder().setTitle("Strategy Roulette").setDescription("Map: Fracture \n Choose a side: ").setColor(Color.RED);
+                    fracture.editMessageEmbeds(embed.build()).setActionRow(sideButtons).queue();
                 });
-                mapNum = 3;
                 break;
             case "Haven":
-                channel.editMessageEmbedsById(messageID).queue(haven -> {
-                    initial.setDescription("Map: Haven \n Choose a Side: ");
-                    haven.editMessageEmbeds(initial.build()).setActionRow(sideButtons).queue();
+                event.getChannel().editMessageEmbedsById(event.getMessageId()).queue(haven -> {
+                    EmbedBuilder embed = new EmbedBuilder().setTitle("Strategy Roulette").setDescription("Map: Haven \n Choose a side: ").setColor(Color.RED);
+                    haven.editMessageEmbeds(embed.build()).setActionRow(sideButtons).queue();
                 });
-                mapNum = 4;
                 break;
             case "Icebox":
-                channel.editMessageEmbedsById(messageID).queue(icebox -> {
-                    initial.setDescription("Map: Icebox \n Choose a Side: ");
-                    icebox.editMessageEmbeds(initial.build()).setActionRow(sideButtons).queue();
+                event.getChannel().editMessageEmbedsById(event.getMessageId()).queue(icebox -> {
+                    EmbedBuilder embed = new EmbedBuilder().setTitle("Strategy Roulette").setDescription("Map: Icebox \n Choose a side: ").setColor(Color.RED);
+                    icebox.editMessageEmbeds(embed.build()).setActionRow(sideButtons).queue();
                 });
-                mapNum = 5;
                 break;
 
             case "Split":
-                channel.editMessageEmbedsById(messageID).queue(split -> {
-                    initial.setDescription("Map: Split \n Choose a Side: ");
-                    split.editMessageEmbeds(initial.build()).setActionRow(sideButtons).queue();
+                event.getChannel().editMessageEmbedsById(event.getMessageId()).queue(split -> {
+                    EmbedBuilder embed = new EmbedBuilder().setTitle("Strategy Roulette").setDescription("Map: Split \n Choose a side: ").setColor(Color.RED);
+                    split.editMessageEmbeds(embed.build()).setActionRow(sideButtons).queue();
                 });
-                mapNum = 6;
                 break;
             case "General":
-                channel.editMessageEmbedsById(messageID).queue(split -> {
-                    initial.setDescription("Any Map \n Choose an Option: ");
-                    split.editMessageEmbeds(initial.build()).setActionRow(genStrats).queue();
-                    mapNum = 7;
+                event.getChannel().editMessageEmbedsById(event.getMessageId()).queue(split -> {
+                    EmbedBuilder embed = new EmbedBuilder().setTitle("Strategy Roulette").setDescription("Any Map \n Choose an Option: ").setColor(Color.RED);
+                    split.editMessageEmbeds(embed.build()).setActionRow(genStrats).queue();
                 });
                 break;
             case "Attacker":
-                channel.editMessageEmbedsById(messageID).queue(attack -> {
-                    initial.setDescription("Map: " + maps[mapNum] + "\n " + "Side: Attacker" + "\n " + "Choose an option: ");
-                    attack.editMessageEmbeds(initial.build()).setActionRow(strats).queue();
+                a = event.getMessage().getEmbeds().get(0);
+                desc = a.getDescription();
+
+                event.getChannel().editMessageEmbedsById(event.getMessageId()).queue(attack -> {
+                    EmbedBuilder embed = new EmbedBuilder().setTitle("Strategy Roulette").setDescription("Map: " + maps[getMap(desc)] + "\n " + "Side: Attacker" + "\n " + "Choose an option: ").setColor(Color.RED);
+                    attack.editMessageEmbeds(embed.build()).setActionRow(strats).queue();
                 });
-                attacker = true;
                 break;
             case "Defender":
-                channel.editMessageEmbedsById(messageID).queue(defend -> {
-                    initial.setDescription("Map: " + maps[mapNum] + "\n " + "Side: Defender" + "\n " + "Choose an option: ");
-                    defend.editMessageEmbeds(initial.build()).setActionRow(strats).queue();
+                a = event.getMessage().getEmbeds().get(0);
+                desc = a.getDescription();
+
+                event.getChannel().editMessageEmbedsById(event.getMessageId()).queue(defend -> {
+                    EmbedBuilder embed = new EmbedBuilder().setTitle("Strategy Roulette").setDescription("Map: " + maps[getMap(desc)] + "\n " + "Side: Defender" + "\n " + "Choose an option: ").setColor(Color.RED);
+                    defend.editMessageEmbeds(embed.build()).setActionRow(strats).queue();
                 });
-                attacker = false;
                 break;
             case "Strat":
-                if (attacker) {
-                    channel.editMessageEmbedsById(messageID).queue(strat -> {
-                        initial.setDescription("Map: " + maps[mapNum] + "\n " + "Side: Attacker" + "\n" + "Strat: " + getStrat(attacker, mapNum));
-                        strat.editMessageEmbeds(initial.build()).setActionRow(strats).queue();
+                a = event.getMessage().getEmbeds().get(0);
+                desc = a.getDescription();
+
+                if (getSide(desc)) {
+                    event.getChannel().editMessageEmbedsById(event.getMessageId()).queue(strat -> {
+                        EmbedBuilder embed = new EmbedBuilder().setTitle("Strategy Roulette").setDescription("Map: " + maps[getMap(desc)] + "\n " + "Side: Attacker" + "\n" + "Strat: " + getStrat(getMap(desc), getSide(desc))).setColor(Color.RED);
+                        strat.editMessageEmbeds(embed.build()).setActionRow(strats).queue();
                     });
                 } else {
-                    channel.editMessageEmbedsById(messageID).queue(strat -> {
-                        initial.setDescription("Map: " + maps[mapNum] + "\n " + "Side: Defender" + "\n" + "Strat: " + getStrat(attacker, mapNum));
-                        strat.editMessageEmbeds(initial.build()).setActionRow(strats).queue();
+                    event.getChannel().editMessageEmbedsById(event.getMessageId()).queue(strat -> {
+                        EmbedBuilder embed = new EmbedBuilder().setTitle("Strategy Roulette").setDescription("Map: " + maps[getMap(desc)] + "\n " + "Side: Attacker" + "\n" + "Strat: " + getStrat(getMap(desc), getSide(desc))).setColor(Color.RED);
+                        strat.editMessageEmbeds(embed.build()).setActionRow(strats).queue();
                     });
                 }
                 break;
 
-                // switches sides between attacker and defender
+            // switches sides between attacker and defender
             case "Change":
-                if (attacker) {
-                    attacker = false;
-                    channel.editMessageEmbedsById(messageID).queue(change -> {
-                        initial.setDescription("Map: " + maps[mapNum] + "\n " + "Side: Defender" + "\n " + "Choose an option: ");
-                        change.editMessageEmbeds(initial.build()).setActionRow(strats).queue();
+                a = event.getMessage().getEmbeds().get(0);
+                desc = a.getDescription();
+
+                if (getSide(desc)) {
+                    event.getChannel().editMessageEmbedsById(event.getMessageId()).queue(change -> {
+                        EmbedBuilder embed = new EmbedBuilder().setTitle("Strategy Roulette").setDescription("Map: " + maps[getMap(desc)] + "\n " + "Side: Defender" + "\n " + "Choose an option: ").setColor(Color.RED);
+                        change.editMessageEmbeds(embed.build()).setActionRow(strats).queue();
                     });
 
                 } else {
-                    attacker = true;
-                    channel.editMessageEmbedsById(messageID).queue(change -> {
-                        initial.setDescription("Map: " + maps[mapNum] + "\n " + "Side: Attacker" + "\n" + "Choose an option: ");
-                        change.editMessageEmbeds(initial.build()).setActionRow(strats).queue();
+                    event.getChannel().editMessageEmbedsById(event.getMessageId()).queue(change -> {
+                        EmbedBuilder embed = new EmbedBuilder().setTitle("Strategy Roulette").setDescription("Map: " + maps[getMap(desc)] + "\n " + "Side: Attacker" + "\n " + "Choose an option: ").setColor(Color.RED);
+                        change.editMessageEmbeds(embed.build()).setActionRow(strats).queue();
                     });
                 }
 
                 break;
             case "End":
-                channel.editMessageEmbedsById(messageID).queue(end -> {
-                    initial.setDescription("The Game is Over. Thanks for Playing!");
-                    end.editMessageEmbeds(initial.build()).setActionRows().queue();
-                    initial.setDescription("Choose a Map: ");
+                event.getChannel().editMessageEmbedsById(event.getMessageId()).queue(end -> {
+                    EmbedBuilder embed = new EmbedBuilder().setTitle("Strategy Roulette").setDescription("The Game is Over. Thanks for Playing!").setColor(Color.RED);
+                    end.editMessageEmbeds(embed.build()).setActionRows().queue();
                 });
                 break;
         }
@@ -213,11 +201,11 @@ public class Commands extends ListenerAdapter {
      * Returns a string containing a strategy based on options selected
      *
      * @param attacker true if attacker false if defender
-     * @param mapNum corresponds to the map chosen
+     * @param mapNum   corresponds to the map chosen
      * @return
      */
 
-    private String getStrat(boolean attacker, int mapNum) {
+    private String getStrat(int mapNum, boolean attacker) {
 
         // Gets strats from strats.json and creates new json object
         JSONObject jsonObject = new JSONObject(contents);
@@ -246,4 +234,51 @@ public class Commands extends ListenerAdapter {
         return strat;
     }
 
+
+    /**
+     * Returns the map number corresponding to the selected map
+     *
+     * @param desc the description of the embed containing the map selected
+     * @return
+     */
+    private int getMap(String desc) {
+
+        int num = 7;
+
+        if (desc.contains("Ascent")) {
+            num = 0;
+        }
+        if (desc.contains("Bind")) {
+            num = 1;
+        }
+        if (desc.contains("Breeze")) {
+            num = 2;
+        }
+        if (desc.contains("Fracture")) {
+            num = 3;
+        }
+        if (desc.contains("Haven")) {
+            num = 4;
+        }
+        if (desc.contains("Icebox")) {
+            num = 5;
+        }
+        if (desc.contains("Split")) {
+            num = 6;
+        }
+
+        return num;
+    }
+
+    /**
+     * Returns true if attacker and false if defender
+     *
+     * @param desc the description of the embed containing the side selected
+     * @return
+     */
+    private boolean getSide(String desc) {
+
+        return !desc.contains("Defender");
+
+    }
 }
