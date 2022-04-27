@@ -82,6 +82,9 @@ public class Commands extends ListenerAdapter {
         MessageEmbed a;
         String desc;
 
+        //Acknowledge the button press
+        event.deferEdit().queue();
+
         // handles each button event
         switch (event.getButton().getId()) {
             case "Ascent" -> event.getChannel().editMessageEmbedsById(event.getMessageId()).queue(ascent -> {
