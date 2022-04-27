@@ -15,7 +15,6 @@ How to Play:
 2. In the desired text-channel type "!start"
 3. Choose a map and a side
 4. Press the "Generate Strat" button and have fun!
-5. To end the game type "!stop" in the same channel or press the "End Game" button
 -----------------------------------------------------
 
 I plan on adding more strategies in the future and possibly a variation called Crosshair roulette and
