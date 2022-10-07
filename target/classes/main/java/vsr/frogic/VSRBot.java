@@ -12,9 +12,7 @@ import java.io.IOException;
 /**
  * Builds VSRBot
  *
- * @author Connor-184 / Frogic
- *
- * Add me on discord if you have any problems/suggestions Frogic#4870
+ * @author Frogic / Connor-184
  */
 
 public class VSRBot {

@@ -101,10 +101,23 @@
     "Each teammate must buy every ability that they possibly can. Rush towards one of the sites, and use all of your abilities as fast as you can on the site. Then quickly retreat and plant the spike at a different site."
   ],
   "FractureD": [
-    "The team is fractured but whole, at least one player must hold each of the 4 sides of the map.",
+    "The team is fractured but whole, Everyone must be holding a different part of the map (A main, dish, B main, arcade).",
     "The signal is being jammed by the large satellite. Nobody is allowed to give comms while on the A half of the map. The middle of the map is the barrier.",
     "There are too many angles to hold! Once you find an angle, you must hold it until either you die or all your teammates at the other site are dead.",
-    "You are not allowed to leave your spawn building. You must hold down the sites from there.",
+    "You are not allowed to leave your spawn building. You must hold down the sites from there. This means you cannot touch sand or grass."
+  ],
+  "PearlA": [
+    "Your team is on a suicide mission, everyone rush down B long. You cannot shoot your weapon until you get onto site. Use whatever abilities you need to get there safely.",
+    "CHARGE!!!! everyone on the team must buy a shotgun and rush down B long.",
+    "Time to go shopping! Everyone must sit in the mid Plaza for at least 20 seconds before leaving to push a site.",
+    "What are they hiding? Everyone must push A site. You cannot plant until every alive member of your team goes through secret, into flowers, then back onto site."
+  ],
+  "PearlD": [
+    "Defend the City! Everyone must buy a shotgun and sit in a corner, you may not leave that corner until you get a kill.",
+    "Surprise! Choose a site, if you chose A, everyone must sit inside Cubby. If you chose B, everyone must sit behind screen. You cannot leave or peak until the enemy team either pushes onto site or plants at the opposite site.",
+    "Right equipment, wrong place. If you are holding A, you must buy a sniper and if you are holding B, you must buy a shotgun. Nobody is allowed to hold mid for this round.",
+    "Ramp it up!, You can only go down ramps. You cannot go up ramps. Choose your paths wisely you could easily get stuck at certain places."
+
   ],
   "General": [
     "Play the round normally, however, you cannot use any normal callouts. Preferably use callouts that don't exist on this map, callouts from other games/maps, or just very broadly describe what you are trying to callout.",

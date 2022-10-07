@@ -28,7 +28,7 @@ public class Commands extends ListenerAdapter {
     public String strats = "src/main/resources/strats.json";
     public String contents = new String(Files.readAllBytes(Paths.get(strats)));
     public String[] maps = new String[] {"Ascent", "Bind", "Breeze", "Fracture", "Haven", "Icebox", "Pearl", "Split"};
-    public EmbedBuilder initial = new EmbedBuilder().setTitle("Strategy Roulette").setColor(Color.RED).setDescription("Select a Map: ");
+    public EmbedBuilder initial = new EmbedBuilder().setTitle("Strategy Roulette").setColor(Color.RED).setDescription("Choose a Map: ");
     Long messageID;
     int mapNum;
     public boolean attacker;
@@ -48,7 +48,6 @@ public class Commands extends ListenerAdapter {
             // Buttons for action lists
             List<Button> mapButtons = new ArrayList<>();
             List<Button> mapButtons2 = new ArrayList<>();
-          //  List<Button> mapButtons3 = new ArrayList<>();
             mapButtons.add(Button.primary("Ascent", "Ascent"));
             mapButtons.add(Button.primary("Fracture", "Fracture"));
             mapButtons.add(Button.primary("Bind", "Bind"));
@@ -59,8 +58,7 @@ public class Commands extends ListenerAdapter {
             mapButtons2.add(Button.primary("Pearl", "Pearl"));
 
             // Sets up embed for choosing a map
-            channel.sendMessageEmbeds(initial.build()).setActionRows(ActionRow.of(mapButtons), ActionRow.of(mapButtons2)).queue(message -> {
-                initial.setDescription("Choose a Map: ");
+            channel.sendMessageEmbeds(initial.setDescription("Choose a Map: ").build()).setActionRows(ActionRow.of(mapButtons), ActionRow.of(mapButtons2)).queue(message -> {
                 messageID = message.getIdLong();
             });
 
